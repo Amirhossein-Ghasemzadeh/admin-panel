@@ -19,7 +19,7 @@ This React application combines Material-UI for styling, Context API for state m
 
     ```bash
     git clone <repository_url>
-    cd my-readme-react-app
+    cd project
     ```
 
 2. Install dependencies:
