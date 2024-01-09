@@ -1,44 +1,49 @@
-import Button from '@mui/material/Button';
+import {Box, CircularProgress} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Paper, {PaperProps} from '@mui/material/Paper';
-import Draggable from 'react-draggable';
+import CloseIcon from '@mui/icons-material/Close';
+
 import {useConsumeContext} from '../context/UserContext';
 import AddOrEditUser from './AddOrEditUser/AddOrEditUser';
-
-function PaperComponent(props: PaperProps) {
-  return (
-    <Draggable
-      handle='#draggable-dialog-title'
-      cancel={'[class*="MuiDialogContent-root"]'}>
-      <Paper {...props} />
-    </Draggable>
-  );
-}
 
 export default function DraggableDialog() {
   const {isOpenModal, handleCloseModal, mode, loading} = useConsumeContext();
 
   return (
     <div>
-      <Dialog
-        open={isOpenModal}
-        onClose={handleCloseModal}
-        PaperComponent={PaperComponent}
-        aria-labelledby='draggable-dialog-title'>
-        <DialogTitle style={{cursor: 'move'}} id='draggable-dialog-title'>
-          Add New User
+      <Dialog open={isOpenModal} onClose={handleCloseModal}>
+        <DialogTitle sx={{display: 'flex', alignItems: 'center'}}>
+          <Box sx={{width: '100%'}}>
+            <p style={{textAlign: 'center', fontWeight: '700'}}>
+              {mode === 'edit' ? 'Edit User' : 'Add New User'}
+            </p>
+          </Box>
+          <CloseIcon
+            onClick={handleCloseModal}
+            sx={{
+              color: '#ee5151',
+              position: 'absolute',
+              right: '20px',
+              cursor: 'pointer',
+            }}
+          />
         </DialogTitle>
-        <DialogContent style={{padding: 4}}>
-          {mode === 'edit' && loading ? 'Loading ...' : <AddOrEditUser />}
+        <DialogContent>
+          {mode === 'edit' && loading ? (
+            <Box
+              sx={{
+                height: '250px',
+                width: '250px',
+                display: 'grid',
+                placeItems: 'center',
+              }}>
+              <CircularProgress color='secondary' />
+            </Box>
+          ) : (
+            <AddOrEditUser />
+          )}
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleCloseModal}>
-            Cancel
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );

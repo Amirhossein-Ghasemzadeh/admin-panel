@@ -10,6 +10,8 @@ import {useConsumeContext} from '../../context/UserContext';
 const positionOptions: types.IPosition[] = [
   {value: 'frontend', label: 'frontend'},
   {value: 'backend', label: 'backend'},
+  {value: 'designer', label: 'designer'},
+  {value: 'manager', label: 'manager'},
 ];
 
 const genderItems: types.IGender[] = [
@@ -27,19 +29,20 @@ const validationSchema = Yup.object({
 const AddOrEditUser = () => {
   const {mode, addNewUser, edit, editUser} = useConsumeContext();
 
-  const initialValues: types.IInitialValues = edit.data
-    ? {
-        name: edit.data.name,
-        email: edit.data.email,
-        position: edit.data.position,
-        gender: edit.data.gender,
-      }
-    : {
-        name: '',
-        email: '',
-        position: '',
-        gender: 0,
-      };
+  const initialValues: types.IInitialValues =
+    mode === 'edit' && edit.data
+      ? {
+          name: edit.data.name,
+          email: edit.data.email,
+          position: edit.data.position,
+          gender: edit.data.gender,
+        }
+      : {
+          name: '',
+          email: '',
+          position: '',
+          gender: 0,
+        };
 
   const handleSubmit = (values: types.IInitialValues) => {
     if (mode === 'add') {
@@ -50,7 +53,7 @@ const AddOrEditUser = () => {
   };
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='md' style={{padding: '20px'}}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -81,8 +84,11 @@ const AddOrEditUser = () => {
                 />
               </Grid>
             </Grid>
-            <Button type='submit' variant='contained'>
-              send
+            <Button
+              type='submit'
+              variant='contained'
+              sx={{mt: 4, width: '100%'}}>
+              save
             </Button>
           </Form>
         )}

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {
   createContext,
   useCallback,
@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import {IState, IProps, IContextValues, IAddUser} from './types';
+import {IState, IProps, IContextValues, IAddUser, IUser} from './types';
 
 const userContext = createContext({} as IContextValues);
 
@@ -30,33 +30,31 @@ const UserContext = ({children}: IProps) => {
   });
 
   const fetchAllUsers = useCallback(async () => {
+    let response: AxiosResponse<IUser[]>;
+
     if (state.text.length >= 2) {
-      const response = await axios(
-        `http://localhost:4000/users?q=${state.text}`
+      response = await axios(
+        `${process.env.REACT_APP_BASE_URL}/users?q=${state.text}`
       );
-      const pageCount = calculatePageCount(response.data.length);
-      setState((prevState) => ({
-        ...prevState,
-        pageCount,
-      }));
     } else {
-      const response = await axios(`http://localhost:4000/users`);
-      const pageCount = calculatePageCount(response.data.length);
-      setState((prevState) => ({
-        ...prevState,
-        pageCount,
-      }));
+      response = await axios(`${process.env.REACT_APP_BASE_URL}/users`);
     }
+
+    setState((prevState) => ({
+      ...prevState,
+      pageCount: calculatePageCount(response?.data.length),
+    }));
   }, [state.text]);
 
   useEffect(() => {
     fetchAllUsers();
   }, [fetchAllUsers]);
 
-  const handleOpenModal = () => {
+  const handleAddUser = () => {
     setState((prevState) => ({
       ...prevState,
       isOpenModal: true,
+      mode: 'add',
     }));
   };
 
@@ -82,26 +80,23 @@ const UserContext = ({children}: IProps) => {
       loading: true,
     }));
 
-    if (state.text.length >= 2) {
-      const response = await axios(
-        `http://localhost:4000/users?q=${state.text}&_page=${state.pageNo}&_limit=4`
-      );
-      setState((prevState) => ({
-        ...prevState,
-        users: response.data,
-        loading: false,
-      }));
-    } else {
-      const response = await axios(
-        `http://localhost:4000/users?_page=${state.pageNo}&_limit=4`
-      );
+    let response: AxiosResponse<IUser[]>;
 
-      setState((prevState) => ({
-        ...prevState,
-        users: response.data,
-        loading: false,
-      }));
+    if (state.text.length >= 2) {
+      response = await axios(
+        `${process.env.REACT_APP_BASE_URL}/users?q=${state.text}&_page=${state.pageNo}&_limit=4`
+      );
+    } else {
+      response = await axios(
+        `${process.env.REACT_APP_BASE_URL}/users?_page=${state.pageNo}&_limit=4`
+      );
     }
+
+    setState((prevState) => ({
+      ...prevState,
+      users: response?.data,
+      loading: false,
+    }));
   }, [state.pageNo, state.text]);
 
   useEffect(() => {
@@ -111,7 +106,7 @@ const UserContext = ({children}: IProps) => {
   // ***** add New User  ***** //
   const addNewUser = async (data: IAddUser) => {
     try {
-      const response = await axios.post(`http://localhost:4000/users`, data);
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/users`, data);
       // close Modal
       setState((prevState) => ({
         ...prevState,
@@ -133,7 +128,9 @@ const UserContext = ({children}: IProps) => {
       mode: 'edit',
     }));
 
-    const response = await axios(`http://localhost:4000/users/${id}`);
+    const response = await axios(
+      `${process.env.REACT_APP_BASE_URL}/users/${id}`
+    );
 
     setState((prevState) => ({
       ...prevState,
@@ -146,8 +143,8 @@ const UserContext = ({children}: IProps) => {
   };
 
   const editUser = async (data: IAddUser) => {
-    const response = await axios.put(
-      `http://localhost:4000/users/${state.edit.id}`,
+    await axios.put(
+      `${process.env.REACT_APP_BASE_URL}/users/${state.edit.id}`,
       data
     );
     setState((prevState) => ({
@@ -158,7 +155,7 @@ const UserContext = ({children}: IProps) => {
   };
 
   const handleDeleteUser = async (id: number) => {
-    await axios.delete(`http://localhost:4000/users/${id}`);
+    await axios.delete(`${process.env.REACT_APP_BASE_URL}/users/${id}`);
     fetchUsers();
     fetchAllUsers();
 
@@ -179,7 +176,7 @@ const UserContext = ({children}: IProps) => {
 
   const values: IContextValues = {
     ...state,
-    handleOpenModal,
+    handleAddUser,
     handleCloseModal,
     handleChange,
     addNewUser,

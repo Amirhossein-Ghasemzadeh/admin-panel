@@ -1,39 +1,25 @@
 {
   "users": [
     {
-      "name": "علیرضا",
-      "email": "amir@amir2.com",
-      "position": "frontend",
-      "gender": 0,
-      "id": 1
-    },
-    {
-      "name": "محمد",
-      "email": "3@amir.com",
-      "position": "frontend",
-      "gender": 0,
+      "name": "hassan",
+      "email": "hassan@gmail.com",
+      "position": "backend",
+      "gender": 1,
       "id": 2
     },
     {
-      "name": "سالار",
-      "email": "5@amir.com",
-      "position": "frontend",
-      "gender": 0,
+      "name": "sara",
+      "email": "sara@gmail.com",
+      "position": "manager",
+      "gender": "0",
       "id": 4
     },
     {
-      "name": "مرتضی",
-      "email": "6@amir.com",
-      "position": "frontend",
-      "gender": "1",
-      "id": 5
-    },
-    {
-      "name": "نیما",
-      "email": "8@amir.com",
+      "name": "kiarash",
+      "email": "kiarash@gmail.com",
       "position": "backend",
-      "gender": "0",
-      "id": 6
+      "gender": 0,
+      "id": 5
     }
   ]
 }

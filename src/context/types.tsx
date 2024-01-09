@@ -28,7 +28,7 @@ export interface IState {
 }
 
 export interface IContextValues extends IState {
-  handleOpenModal: () => void;
+  handleAddUser: () => void;
   handleCloseModal: () => void;
   handleChange: (event: React.ChangeEvent<unknown>, value: number) => void;
   addNewUser: (data: IAddUser) => void;

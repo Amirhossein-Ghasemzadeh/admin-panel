@@ -20,7 +20,7 @@ import {useConsumeContext} from '../../context/UserContext';
 const UserTable: React.FC = () => {
   const {
     users,
-    handleOpenModal,
+    handleAddUser,
     handleChange,
     handleEditUser,
     handleDeleteUser,
@@ -44,12 +44,12 @@ const UserTable: React.FC = () => {
           <Button
             sx={{margin: '20px 0'}}
             variant='contained'
-            onClick={handleOpenModal}>
+            onClick={handleAddUser}>
             Add New User
           </Button>
         </Box>
       </Box>
-      <TableContainer component={Paper} placeholder='547567'>
+      <TableContainer component={Paper} sx={{border: '1px solid #b2aaaa'}}>
         <Table sx={{minWidth: 650}} aria-label='simple table'>
           <TableHead>
             <TableRow>
